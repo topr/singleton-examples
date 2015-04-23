@@ -1,0 +1,11 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+
+repositories {
+	maven { url 'http://xldn3162vdap.ldn.swissbank.com:8080/archiva/repository/internal' }
+	mavenCentral()
+}
+
+dependencies {
+	compile 'org.codehaus.groovy:groovy-all:2.4.3'
+}
