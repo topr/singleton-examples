@@ -118,7 +118,7 @@ As mentioned previously with Eagerly initialized singleton, here is similar situ
 `enum` instance fields are not "initialized by a compile-time constant expression". They can't be, because only String and primitive types are possible types for a compile-time constant expression.
 That means that the class will be initialized when `INSTANCE` is first accessed - which is exactly the desired effect.
 
-### A singleton with arguments
+### Singleton with arguments
 
 We've seen not once that singleton with arguments is handful with Dependency Injection.
 However it seems that providing arguments to a such class makes it singleton no more.
@@ -150,7 +150,6 @@ Groovy API docs:
 ---
 
 ### TODO:
-- improve Singleton with arguments example
 - read http://javarevisited.blogspot.gr/2012/07/why-enum-singleton-are-better-in-java.html
 - read http://www.drdobbs.com/jvm/creating-and-destroying-java-objects-par/208403883?pgno=3
 - what's the difference when static block used
