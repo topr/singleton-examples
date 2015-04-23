@@ -47,7 +47,7 @@ Still quite simple and clean implementation but can it be trusted for sure?
 ### Thread-safe lazy initialized singleton
 
 The problem is that an out-of-order write may allow the instance reference to be returned before the singleton constructor is executed.
-That's why for full thread safety _double checked locking_ is being used in this implementation:
+That's why for full thread safety _double-checked locking_ is being used in this implementation:
 
 * `instance` has `volatile` keyword added
 * there is one check if singleton has been already initialized before synchronization
@@ -57,7 +57,7 @@ According to wiki this method should not be used with older versions of JAVA tha
 
 The point is: it gets complex already, it's easy to forget the volatile statement and difficult to understand why it is necessary.
 
-More about double checked locking and related issues: http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html
+[More about double-checked locking and related issues](http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html)
 
 ### Eagerly initialized singleton
 
@@ -100,7 +100,7 @@ Wiki:
 >It takes advantage of language guarantees about class initialization, and will therefore work correctly in all Java-compliant compilers and virtual machines.
 
 >The nested class is referenced no earlier (and therefore loaded no earlier by the class loader) than the moment that `getInstance()` is called.
-Thus, this solution is thread-safe without requiring special language constructs (i.e. `volatile` or `synchronized`).
+>Thus, this solution is thread-safe without requiring special language constructs (i.e. `volatile` or `synchronized`).
 
 ### Enum based singleton
 
@@ -124,20 +124,28 @@ We've seen not once that singleton with arguments is handful with Dependency Inj
 However it seems that providing arguments to a such class makes it singleton no more.
 
 The mistake perhaps comes from the fact that for example Spring names specific _scope_ of a _bean_ as "singleton".
-Bear in mind that's the scope name and not the Design Pattern of the class being instantiated in the IoC container.
+Bear in mind that's the name of bean scope within container and not the Design Pattern of the class being instantiated in the IoC container.
 
 If there is a need to feed a singleton with some data there are two options:
 1. it may be loaded once after instantiation with some `init(Type argument)` method.
 2. it may be passed as argument(s) to the method being executed if the operation singleton performs is recurring, and with different parameters each time.
 
 A singleton, by definition, if an object you want to be instantiated no more than once. If you are trying to feed parameters to the constructor, what is the point of the singleton?
-Thus let me state this clear: **a singleton with constructor parameters is not a singleton**.
+So let me state this clear: **a singleton with constructor parameters is not a singleton**.
 
 ## How about Groovy?
 
 The most of described JAVA approaches may be implemented in Groovy as well.
-However Groovy comes with handful AST annotation `@Singleton` OOB.
+However Groovy comes with handful AST annotation [`@Singleton`](http://docs.groovy-lang.org/latest/html/api/groovy/lang/Singleton.html) OOB.
 This annotation may be used on any class to transform it into singleton.
+
+Groovy API docs:
+>Class annotation to make a singleton class. The singleton is obtained through normal property access using the singleton property (defaults to "instance").
+>Such classes can be initialized during normal static initialization of the class or lazily (on first access). To make the singleton lazy use @Singleton(lazy=true).
+>Lazy singletons are implemented with double-checked locking and a volatile backing field. By default, no explicit constructors are allowed. To create one or more explicit constructors use @Singleton(strict=false).
+>This could be used to:
+>* provide your own custom initialization logic in your own no-arg constructor - you will be responsible for the entire code (the @Singleton annotation becomes merely documentation)
+>* provide one or more constructors with arguments for a quasi-singleton - these constructors will be used to create instances that are independent of the singleton instance returned by the singleton property
 
 ---
 
@@ -147,6 +155,5 @@ This annotation may be used on any class to transform it into singleton.
 - read http://www.drdobbs.com/jvm/creating-and-destroying-java-objects-par/208403883?pgno=3
 - what's the difference when static block used
 - refresh volatile behaviour
-- prepare Groovy example and read about @Singleton implementation
 - read more about double-check-locking: http://en.wikipedia.org/wiki/Double-checked_locking#Usage_in_Java
 - add links to specific source files under each description
