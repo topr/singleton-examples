@@ -41,18 +41,18 @@ Probably the most recognizable implementation:
 
 How about concurrency issues?
 
-### Thread-safer lazy initialized singleton
+### Synchronized, lazy initialized singleton
 
-[example](src/main/java/com/ubs/example/singleton/ThreadSaferLazyInitializedSingleton.java)
+[example](src/main/java/com/ubs/example/singleton/SynchronizedSingleton.java)
 
 There is a risk of creation and returing more then one instance in multithreaded environment if more then one thread call `getInstance()` in the same time before singleton has been initialized for the 1st time.
 To lower the risk of such issue `synchronized` keyword is added to `getInstance()` method which ensures the same instance will be returned among the threads.
 
 Still quite simple and clean implementation but can it be trusted for sure?
 
-### Thread-safe lazy initialized singleton
+### Double-checked locking, lazy initialized singleton
 
-[example](src/main/java/com/ubs/example/singleton/ThreadSafeLazyInitializedSingleton.java)
+[example](src/main/java/com/ubs/example/singleton/DoubleCheckedLockingSingleton.java)
 
 The problem is that an out-of-order write may allow the instance reference to be returned before the singleton constructor is executed.
 That's why for full thread safety _double-checked locking_ is being used in this implementation.
@@ -62,7 +62,7 @@ Wiki:
 Only if the locking criterion check indicates that locking is required does the actual locking logic proceed.
 
 Thus
-* `instance` has `volatile` keyword added
+* `instance` field has `volatile` keyword added
 * there is one check if singleton has been already initialized before synchronization
 * and another check after synchronization
 
@@ -141,6 +141,7 @@ As mentioned previously with Eagerly initialized singleton, here is similar situ
 
 `enum` instance fields are not "initialized by a compile-time constant expression". They can't be, because only String and primitive types are possible types for a compile-time constant expression.
 That means that the class will be initialized when `INSTANCE` is first accessed - which is exactly the desired effect.
+And the most important: **it is simple to implement**, no complex and error-prone code.
 
 ### Singleton with arguments
 
