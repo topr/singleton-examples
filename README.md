@@ -1,6 +1,8 @@
 # Singleton
 ### _The most common, yet not so well known design pattern._
 
+A singleton is simply a class that is instantiated exactly once.
+
 According to wiki:
 > In software engineering, the **singleton pattern** is a design pattern that restricts the instantiation of a class to one object.
 > This is useful when exactly one object is needed to coordinate actions across the system.
@@ -53,8 +55,13 @@ Still quite simple and clean implementation but can it be trusted for sure?
 [example](src/main/java/com/ubs/example/singleton/ThreadSafeLazyInitializedSingleton.java)
 
 The problem is that an out-of-order write may allow the instance reference to be returned before the singleton constructor is executed.
-That's why for full thread safety _double-checked locking_ is being used in this implementation:
+That's why for full thread safety _double-checked locking_ is being used in this implementation.
 
+Wiki:
+>In software engineering, double-checked locking (also known as "double-checked locking optimization") is a software design pattern used to reduce the overhead of acquiring a lock by first testing the locking criterion (the "lock hint") without actually acquiring the lock.
+Only if the locking criterion check indicates that locking is required does the actual locking logic proceed.
+
+Thus
 * `instance` has `volatile` keyword added
 * there is one check if singleton has been already initialized before synchronization
 * and another check after synchronization
@@ -63,7 +70,9 @@ According to wiki this method should not be used with older versions of JAVA tha
 
 The point is: it gets complex already, it's easy to forget the volatile statement and difficult to understand why it is necessary.
 
-[More about double-checked locking and related issues](http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html)
+More about double-checked locking, why it is broken in JAVA and related issues:
+http://jeremymanson.blogspot.co.uk/2008/05/double-checked-locking.html
+http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html
 
 ### Eagerly initialized singleton
 
@@ -168,10 +177,8 @@ Groovy API docs:
 
 ---
 
-### TODO:
-- read http://javarevisited.blogspot.gr/2012/07/why-enum-singleton-are-better-in-java.html
-- read http://www.drdobbs.com/jvm/creating-and-destroying-java-objects-par/208403883?pgno=3
-- what's the difference when static block used
-- refresh volatile behaviour
-- read more about double-check-locking: http://en.wikipedia.org/wiki/Double-checked_locking#Usage_in_Java
-- add links to specific source files under each description
+### References:
+- [Why Enum Singleton are better in Java](http://javarevisited.blogspot.gr/2012/07/why-enum-singleton-are-better-in-java.html)
+- [10 Singleton Pattern Interview Questions in Java - Answered](http://javarevisited.blogspot.sg/2011/03/10-interview-questions-on-singleton.html)
+- [Wiki: Singleton pattern](http://en.wikipedia.org/wiki/Singleton_pattern)
+- [Creating and Destroying Java Objects: Part 1, page 3](http://www.drdobbs.com/jvm/creating-and-destroying-java-objects-par/208403883?pgno=3)
