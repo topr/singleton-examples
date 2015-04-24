@@ -10,7 +10,7 @@ According to wiki:
 Some even say that singleton is anti-pattern, wiki:
 > There is criticism of the use of the singleton pattern, as some consider it an anti-pattern, judging that it is overused, introduces unnecessary restrictions in situations where a sole instance of a class is not actually required, and introduces global state into an application.
 
-Which obviously may be true but only an anti-pattern if used incorrectly, though that is the definition of an anti-pattern itself.
+Which obviously may be true but it's an anti-pattern only if used incorrectly. That is the definition of an anti-pattern itself though.
 
 ## Common uses
 
@@ -30,6 +30,8 @@ Quite a few caveats and mistakes my be done at the same time too.
 
 ### Lazy initialized singleton
 
+[example](src/main/java/com/ubs/example/singleton/LazyInitializedSingleton.java)
+
 Probably the most recognizable implementation:
 * private constructor
 * public getter which initializes when called for the 1st time
@@ -39,12 +41,16 @@ How about concurrency issues?
 
 ### Thread-safer lazy initialized singleton
 
+[example](src/main/java/com/ubs/example/singleton/ThreadSaferLazyInitializedSingleton.java)
+
 There is a risk of creation and returing more then one instance in multithreaded environment if more then one thread call `getInstance()` in the same time before singleton has been initialized for the 1st time.
 To lower the risk of such issue `synchronized` keyword is added to `getInstance()` method which ensures the same instance will be returned among the threads.
 
 Still quite simple and clean implementation but can it be trusted for sure?
 
 ### Thread-safe lazy initialized singleton
+
+[example](src/main/java/com/ubs/example/singleton/ThreadSafeLazyInitializedSingleton.java)
 
 The problem is that an out-of-order write may allow the instance reference to be returned before the singleton constructor is executed.
 That's why for full thread safety _double-checked locking_ is being used in this implementation:
@@ -60,6 +66,8 @@ The point is: it gets complex already, it's easy to forget the volatile statemen
 [More about double-checked locking and related issues](http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html)
 
 ### Eagerly initialized singleton
+
+[example](src/main/java/com/ubs/example/singleton/EagerlyInitializedSingleton.java)
 
 Another widely recognized implementation:
 * private constructor
@@ -80,19 +88,24 @@ This is guaranteed by the compiler, in other words, all static initialization is
 There is potential drawback - the cost of instance creation in terms of time and resources should be considered.
 However as we already said, it is not so different in terms of laziness so this shouldn't be a big concern.
 
-
 ### Public field singleton
+
+[example](src/main/java/com/ubs/example/singleton/PublicFieldSingleton.java)
 
 Similar to the previous approach but a bit more concise by making the `INSTANCE` field access level `public`. Obviously this way instance field has to be `final`.
 Having instance as a constant allows to remove accessor method `getInstance()`.
 
 ### Static block initialization
 
+[example](src/main/java/com/ubs/example/singleton/StaticBlockInitializedSingleton.java)
+
 Similar to _eagerly initialized singleton_ previous but allowing to do some pre-processing, let say error-checking.
 
 May be combined with _Public field singleton_ approach
 
 ### Initialization-on-demand (holder pattern)
+
+[example](src/main/java/com/ubs/example/singleton/InitializedOnDemandSingleton.java)
 
 Wiki:
 >(...) efforts on the "Double-checked locking" idiom led to changes in the Java memory model in Java 5 and to what is generally regarded as the standard method to implement Singletons in Java.
@@ -104,7 +117,7 @@ Wiki:
 
 ### Enum based singleton
 
-blob/master/src/main/java/com/ubs/example/singleton/EnumSingleton.java
+[example](src/main/java/com/ubs/example/singleton/EnumSingleton.java)
 
 If constant why not go further and use `enum` then?
 
@@ -122,6 +135,8 @@ That means that the class will be initialized when `INSTANCE` is first accessed 
 
 ### Singleton with arguments
 
+[example](src/main/java/com/ubs/example/singleton/SingletonWithArgument.java)
+
 We've seen not once that singleton with arguments is handful with Dependency Injection.
 However it seems that providing arguments to a such class makes it singleton no more.
 
@@ -136,6 +151,8 @@ A singleton, by definition, if an object you want to be instantiated no more tha
 So let me state this clear: **a singleton with constructor parameters is not a singleton**.
 
 ## How about Groovy?
+
+[example](src/main/groovy/com/ubs/example/singleton/GroovySingleton.groovy)
 
 The most of described JAVA approaches may be implemented in Groovy as well.
 However Groovy comes with handful AST annotation [`@Singleton`](http://docs.groovy-lang.org/latest/html/api/groovy/lang/Singleton.html) OOB.
