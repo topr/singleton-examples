@@ -104,6 +104,8 @@ Wiki:
 
 ### Enum based singleton
 
+blob/master/src/main/java/com/ubs/example/singleton/EnumSingleton.java
+
 If constant why not go further and use `enum` then?
 
 As `enum` is 1st class citizen among other classes in JAVA it can be used as well to implement singleton.
